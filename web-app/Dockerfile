@@ -7,4 +7,4 @@ COPY index.html style.css script.js ./
 COPY images/ ./images/
 COPY resume/ ./resume/
 
-EXPOSE 8080
+EXPOSE 8081
