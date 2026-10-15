@@ -21,6 +21,7 @@ jobs:
   publish:
     name: Build and publish image to GHCR
     runs-on: ubuntu-latest
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -33,7 +34,7 @@ jobs:
         with:
           registry: ghcr.io
           username: midhunshanmugam2004-code
-          password: ${{ secrets.TOKEN }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate image tags
         id: metadata
