@@ -1,7 +1,5 @@
 .git
 .gitignore
-Dockerfile
 README.md
-nginx.conf
 k8s/
 node_modules/
