@@ -48,17 +48,33 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+let emailServiceReady = false;
+
 window.addEventListener("load", function () {
     if (typeof window.emailjs === "undefined") {
         console.error("EmailJS is not loaded.");
         return;
     }
-    window.emailjs.init("b52NgaxoZ_gG25iie");
-    console.log("EmailJS initialized successfully.");
+    try {
+        window.emailjs.init("b52NgaxoZ_gG25iie");
+        emailServiceReady = true;
+    } catch (error) {
+        console.error("EmailJS initialization failed:", error);
+    }
 });
 
 function sendMail(event) {
     event.preventDefault();
+
+    const form = document.getElementById("contact-form");
+    const submitButton = form.querySelector('button[type="submit"]');
+    const status = document.getElementById("contact-status");
+
+    if (!emailServiceReady || typeof window.emailjs === "undefined") {
+        status.textContent = "Email service is unavailable. Please try again later or email me directly.";
+        status.classList.add("is-error");
+        return;
+    }
 
     const nameValue = document.getElementById("name").value;
     const emailValue = document.getElementById("email").value;
@@ -71,20 +87,24 @@ function sendMail(event) {
         message: messageValue
     };
 
-    if (typeof window.emailjs === "undefined") {
-        console.error("EmailJS is not loaded.");
-        alert("Email service is unavailable. Please try again later.");
-        return;
-    }
+    status.textContent = "Sending your message...";
+    status.classList.remove("is-error", "is-success");
+    submitButton.disabled = true;
 
     window.emailjs.send("service_lzbac4x", "template_yr2zo6k", params)
         .then(function (response) {
             console.log("Message sent successfully!", response);
-            alert("Message sent successfully! Check your email.");
-            document.getElementById("contact-form").reset();
+            form.reset();
+            status.textContent = "Message sent successfully. Thanks for reaching out!";
+            status.classList.add("is-success");
         })
         .catch(function (error) {
             console.error("Failed to send message:", error);
-            alert("Failed to send message. Please check the console for errors.");
+            const errorMessage = error && error.text ? error.text : "Please check your EmailJS service, template, and allowed domains.";
+            status.textContent = "Could not send message: " + errorMessage;
+            status.classList.add("is-error");
+        })
+        .finally(function () {
+            submitButton.disabled = false;
         });
 }

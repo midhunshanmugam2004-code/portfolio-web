@@ -1103,6 +1103,21 @@ section{
     transform: none;
 }
 
+.contact-status{
+    min-height: 22px;
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.contact-status.is-success{
+    color: #18764b;
+}
+
+.contact-status.is-error{
+    color: #a52b3c;
+}
+
 a:focus-visible,
 button:focus-visible,
 input:focus-visible,
